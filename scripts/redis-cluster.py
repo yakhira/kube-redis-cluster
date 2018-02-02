@@ -234,7 +234,6 @@ if args.build:
     (myip, myid, myflag) = clustercreator.get_myself()
     clustercreator.meet_peer(peers_ip)
     clustercreator.spread_slots(peers_ip)
-    time.sleep(3)
     clustercreator.adjust_slaves()
 
     while True:
