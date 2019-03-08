@@ -1,20 +1,12 @@
-FROM redis:alpine
-MAINTAINER "Ruslan Iakhin <ruslan.iakhin@concur.com>"
+FROM redis:5.0
 
-ENV WORKDIR /usr/src/app
-WORKDIR $WORKDIR
+LABEL maintainer="Ruslan Iakhin <ruslan.k.yakhin@gmail.com>"
 
-COPY . $WORKDIR/
+RUN apt-get update; \
+    apt-get install -y wget dnsutils
 
-RUN mkdir -p /var/lib/redis; \
-    mkdir -p $WORKDIR/logs
-RUN apk --no-cache update; \
-    apk --no-cache add python3 git supervisor gcc python3-dev musl-dev py-twisted
-RUN pip3 install click requests twisted; \
-    git clone https://github.com/yakhira/redis-py.git; \
-    cd redis-py; \
-    python3 setup.py install; \
-    rm -rf $WORKDIR/redis-py
+COPY etc/ /etc/
 
-EXPOSE 6379 16379
-CMD ["/usr/bin/supervisord", "-c", "conf/supervisord.conf"]
+RUN chmod +x /etc/bootstrap-pod.sh
+
+CMD [ "/etc/bootstrap-pod.sh" ]

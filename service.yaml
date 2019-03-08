@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "false"
+  name: redis-cluster
+  labels:
+    app: redis-cluster
+spec:
+  ports:
+  - port: 6379
+    targetPort: 7617
+    name: client
+  - port: 16379
+    targetPort: 16379
+    name: gossip
+  #clusterIP: None
+  type: ClusterIP
+  selector:
+    app: redis-cluster
